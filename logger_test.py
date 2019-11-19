@@ -1,5 +1,5 @@
 from sys import stdout
-from hgcache.logger import log
+from logger import log
 
 
 def test_log_print():

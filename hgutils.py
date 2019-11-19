@@ -3,10 +3,10 @@
 import os
 import subprocess
 import hashlib
-from hgcache.constants import EXE_HG
-from hgcache.exeutils import execute_in_subdir
-from hgcache.exeutils import execute_hg_in_subdir
-from hgcache.exeutils import execute_hg_in_subdir_or_die
+from constants import EXE_HG
+from exeutils import execute_in_subdir
+from exeutils import execute_hg_in_subdir
+from exeutils import execute_hg_in_subdir_or_die
 
 
 def hg_create_randomrepo(root, ncommits):
@@ -34,7 +34,7 @@ def hg_spoil_extra_changeset(repo):
 
 
 def hg_spoil_missing_changeset(repo):
-    rc, out = execute_hg_in_subdir(repo, ["id", "-n"])
+    _, out = execute_hg_in_subdir(repo, ["id", "-n"])
     execute_hg_in_subdir(repo, ["strip", "-r", out])
 
 
@@ -45,7 +45,7 @@ def hg_spoil_local_changes(repo):
 
 
 def hg_config(directory, ui=None):
-    rc, out = execute_hg_in_subdir_or_die(directory, ["config"], ui=ui)
+    _, out = execute_hg_in_subdir_or_die(directory, ["config"], ui=ui)
     return dict(
         [[x[:x.index("=")], x[x.index("=")+1:]]
          for x in out.splitlines()])

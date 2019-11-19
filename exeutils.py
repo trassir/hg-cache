@@ -2,11 +2,11 @@
 
 import os
 import subprocess
-from hgcache.logger import log
-from hgcache.constants import ENVVAR_HG_CACHE
-from hgcache.constants import HG_PLUGIN_ARGS
-from hgcache.constants import IS_PYTEST
-from hgcache.constants import EXE_HG
+from logger import log
+from constants import ENVVAR_HG_CACHE
+from constants import HG_PLUGIN_ARGS
+from constants import IS_PYTEST
+from constants import EXE_HG
 
 
 class SubcommandException(RuntimeError):
@@ -50,7 +50,7 @@ def execute_hg_in_subdir(subdir, args, cache="", ui=None, use_self=False):
         ui=ui)
 
 
-def execute_hg_in_subdir_or_die(
+def execute_hg_in_subdir_or_die(  #pylint: disable-msg=too-many-arguments
         subdir, args, cache=None, ui=None, use_self=False, good_retcodes=None):
     if good_retcodes is None:
         good_retcodes = [0]

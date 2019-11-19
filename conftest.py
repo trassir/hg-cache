@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 import pytest
-from hgcache.hgutils import hg_create_randomrepo
+from hgutils import hg_create_randomrepo
 
 
 @pytest.fixture(scope='function')

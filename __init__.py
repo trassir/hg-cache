@@ -2,13 +2,13 @@
 
 import os
 from mercurial import extensions, commands
-from hgcache.cacheutils import HgCacheOperationError
-from hgcache.cacheutils import initialize_cache
-from hgcache.hgutils import hg_config
-from hgcache.hgutils import hg_strip
-from hgcache.hgutils import hg_have_out
-from hgcache.hgutils import hg_config_set_default_remote
-from hgcache.logger import log
+from cacheutils import HgCacheOperationError
+from cacheutils import initialize_cache
+from hgutils import hg_config
+from hgutils import hg_strip
+from hgutils import hg_have_out
+from hgutils import hg_config_set_default_remote
+from logger import log
 
 
 def _clone_with_cache(orig, ui, repo, *args, **opts):  # pragma: no cover
@@ -38,6 +38,6 @@ def _pull_with_cache(orig, ui, repo, *args, **opts):  # pragma: no cover
     return orig(ui, repo, *args, **opts)
 
 
-def uisetup(ui):  # pragma: no cover
+def uisetup(_):  # pragma: no cover
     extensions.wrapcommand(commands.table, "clone", _clone_with_cache)
     extensions.wrapcommand(commands.table, "pull", _pull_with_cache)

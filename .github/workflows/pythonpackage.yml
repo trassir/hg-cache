@@ -24,6 +24,7 @@ jobs:
         # pip install -r requirements.txt
     - name: Lint with prospector
       run: |
+        pip install pytest
         pip install prospector
         prospector -s medium
     - name: Test with pytest

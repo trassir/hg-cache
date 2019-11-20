@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/trassir/hg-cache/branch/master/graph/badge.svg)](https://codecov.io/gh/trassir/hg-cache)
+
 ## What?
 
 This extension caches remote repository in directory specified by environment variable `HG_CACHE` to speed up `clone` and `pull` operations.

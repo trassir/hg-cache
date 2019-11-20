@@ -31,11 +31,8 @@ jobs:
       run: |
         pip install pytest
         pip install pytest-cov
-        pytest --cov=./ --cov-report=xml
-    - name: Find coverages
-      run: |
-        find . -name *.xml
-    - name: Codecov
-      run: |
         pip install codecov
+        pytest --cov=./ --cov-report=xml
+        find . -name *.xml
         codecov -f coverage.xml -t ${{ secrets.CODECOV_TOKEN }}
+      

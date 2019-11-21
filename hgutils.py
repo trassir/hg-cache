@@ -18,7 +18,7 @@ def hg_create_randomrepo(root, ncommits):
         filename = os.path.join(md5.hexdigest())
         open(filename, "wb").write(filedata)
         subprocess.check_call([EXE_HG(), "add", filename])
-        subprocess.check_call([EXE_HG(), "commit", "-m", "add %s" % filename])
+        subprocess.check_call([EXE_HG(), "commit", "-m", "add %s" % filename, "-u", "testuser"])
     cd = os.curdir
     os.chdir("%s" % root)
     subprocess.check_call([EXE_HG(), "init"])

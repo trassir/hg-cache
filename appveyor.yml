@@ -1,4 +1,4 @@
-
+environment:
   matrix:
     - PYTHON: "C:\\Python27"
 

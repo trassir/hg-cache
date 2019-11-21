@@ -18,7 +18,7 @@ def hg_create_randomrepo(root, ncommits):
         filename = os.path.join(md5.hexdigest())
         open(filename, "wb").write(filedata)
         subprocess.check_call([EXE_HG(), "add", filename])
-        subprocess.check_call([EXE_HG(), "commit", "-m", "add %s" % filename])
+        subprocess.check_call([EXE_HG(), "commit", "-m", "add %s" % filename, "-u", "testuser"])
     cd = os.curdir
     os.chdir("%s" % root)
     subprocess.check_call([EXE_HG(), "init"])
@@ -30,7 +30,7 @@ def hg_create_randomrepo(root, ncommits):
 def hg_spoil_extra_changeset(repo):
     execute_in_subdir(repo, ["touch", "spoilfile"])
     execute_hg_in_subdir(repo, ["add", "spoilfile"])
-    execute_hg_in_subdir(repo, ["ci", "-m", "spoilfile"])
+    execute_hg_in_subdir(repo, ["commit", "-m", "spoilfile", "-u", "testuser"])
 
 
 def hg_spoil_missing_changeset(repo):

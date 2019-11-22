@@ -26,7 +26,7 @@ def test_initialize_cache_not_a_dir(tmpdir):
 
 
 def test_initialize_cache_nonexistent(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
+    (_, cache, remote, _) = prepare_repos
     os.environ[ENVVAR_HG_CACHE()] = \
         os.path.join(cache, "more", "directories", "to", "cache")
     cache_dir = initialize_cache(None, remote)
@@ -34,7 +34,7 @@ def test_initialize_cache_nonexistent(prepare_repos):
 
 
 def test_initialize_cache_not_repo(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
+    (_, _, remote, _) = prepare_repos
     shutil.rmtree(os.path.join(os.path.join(remote, ".hg")))
     os.environ[ENVVAR_HG_CACHE()] = remote
     with pytest.raises(HgCacheOperationError):
@@ -42,7 +42,7 @@ def test_initialize_cache_not_repo(prepare_repos):
 
 
 def test_initialize_cache_irrelevant_remote(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
+    (_, cache, remote, foreign) = prepare_repos
     os.environ[ENVVAR_HG_CACHE()] = cache
     cache_dir = initialize_cache(None, remote)
     assert cache_dir == cache
@@ -52,7 +52,7 @@ def test_initialize_cache_irrelevant_remote(prepare_repos):
 
 
 def test_initialize_cache_have_outgoing(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
+    (_, cache, remote, _) = prepare_repos
     os.environ[ENVVAR_HG_CACHE()] = cache
     cache_dir = initialize_cache(None, remote)
     assert cache_dir == cache
@@ -64,7 +64,7 @@ def test_initialize_cache_have_outgoing(prepare_repos):
 
 
 def test_initialize_cache_have_local_changes(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
+    (_, cache, remote, _) = prepare_repos
     os.environ[ENVVAR_HG_CACHE()] = cache
     cache_dir = initialize_cache(None, remote)
     assert cache_dir == cache

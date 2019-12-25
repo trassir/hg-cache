@@ -10,6 +10,11 @@ from hgutils import hg_config
 from logger import log
 
 
+def cache_with_subdir(cache_root_dir, remote):
+    _, remote_basename = os.path.split(remote.rstrip('/'))
+    return os.path.join(os.path.abspath(cache_root_dir), remote_basename)
+
+
 class HgCacheConfigError(RuntimeError):
     """When cache cannot be initialised using specified configuration"""
 
@@ -29,11 +34,16 @@ def initialize_cache(ui, remote):
             "environment variable {var} is not set".format(
                 var=ENVVAR_HG_CACHE()))
 
-    cache_dir = os.path.abspath(os.environ[ENVVAR_HG_CACHE()])
+    cache_dir = cache_with_subdir(os.environ[ENVVAR_HG_CACHE()], remote)
 
     # cache dir must exist
     if not os.path.exists(cache_dir):
-        os.makedirs(cache_dir)
+        try:
+            os.makedirs(cache_dir)
+        except OSError as e:
+            raise HgCacheConfigError(
+                "could not create directory '{cache_dir}':\n{exception}".format(
+                    cache_dir=cache_dir, exception=e))
 
     # cache dir must be a directory
     if not os.path.isdir(cache_dir):

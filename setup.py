@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.1",
     author="Vladimir Looze",
     author_email="woldemar@mimas.ru",
-    description="Mercurial extention for caching remote repositories",
+    description="Mercurial extension for caching remote repositories",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/trassir/hg-cache",

@@ -23,6 +23,11 @@ class HgCacheInconsistentError(RuntimeError):
 
 
 def initialize_cache(ui, remote):
+    def trim_slashes(url):
+        while url[-1] == "/":
+            url = url[:-1]
+        return url
+
     # cache dir must be specified
     if not ENVVAR_HG_CACHE() in os.environ:
         raise HgCacheConfigError(
@@ -54,8 +59,8 @@ def initialize_cache(ui, remote):
             "could not read default path for cache at {cache}".format(
                 cache=cache_dir))
     cache_path_default = cache_cfg["paths.default"]
-    cache_path_default_cmp = cache_path_default.lower().replace("\\", "/")
-    remote_cmp = remote.lower().replace("\\", "/")
+    cache_path_default_cmp = trim_slashes(cache_path_default.lower().replace("\\", "/"))
+    remote_cmp = trim_slashes(remote.lower().replace("\\", "/"))
     if cache_path_default_cmp != remote_cmp:
         raise HgCacheInconsistentError(
             "cache in {cache_dir} is from irrelevant repo '{foreign}'"

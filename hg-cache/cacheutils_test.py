@@ -51,6 +51,15 @@ def test_initialize_cache_irrelevant_remote(prepare_repos):
         initialize_cache(None, remote)
 
 
+def test_initialize_cache_extraslash(prepare_repos):
+    (_, cache, remote, foreign) = prepare_repos
+    os.environ[ENVVAR_HG_CACHE()] = cache
+    cache_dir = initialize_cache(None, remote)
+    assert cache_dir == cache
+    hg_config_set_default_remote(cache_dir, remote + "/")
+    initialize_cache(None, remote)
+
+
 def test_initialize_cache_have_outgoing(prepare_repos):
     (_, cache, remote, _) = prepare_repos
     os.environ[ENVVAR_HG_CACHE()] = cache

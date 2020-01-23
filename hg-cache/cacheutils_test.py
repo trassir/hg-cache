@@ -52,7 +52,7 @@ def test_initialize_cache_irrelevant_remote(prepare_repos):
 
 
 def test_initialize_cache_extraslash(prepare_repos):
-    (_, cache, remote, foreign) = prepare_repos
+    (_, cache, remote, _) = prepare_repos
     os.environ[ENVVAR_HG_CACHE()] = cache
     cache_dir = initialize_cache(None, remote)
     assert cache_dir == cache

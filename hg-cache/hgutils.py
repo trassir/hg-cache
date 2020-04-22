@@ -64,7 +64,7 @@ def hg_log(local, ui=None, cache=None, use_self=False):
 
 def hg_strip(local, revset, ui=None, cache=None, use_self=False):
     return execute_hg_in_subdir_or_die(
-        local, ["strip", "-r", revset, "--config", "extensions.strip="],
+        local, ["strip", "--force", "-r", revset, "--config", "extensions.strip="],
         ui=ui, cache=cache, use_self=use_self)
 
 

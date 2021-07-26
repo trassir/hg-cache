@@ -2,7 +2,7 @@
 
 import os
 import subprocess
-from constants import EXE_HG
+from hg_cache.constants import EXE_HG
 
 
 def test_hg_found_is_executable():

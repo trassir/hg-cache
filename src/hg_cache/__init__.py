@@ -2,13 +2,13 @@
 
 import os
 from mercurial import extensions, commands
-from cacheutils import HgCacheOperationError
-from cacheutils import initialize_cache
-from hgutils import hg_config
-from hgutils import hg_strip
-from hgutils import hg_have_out
-from hgutils import hg_config_set_default_remote
-from logger import log
+from .cacheutils import HgCacheOperationError
+from .cacheutils import initialize_cache
+from .hgutils import hg_config
+from .hgutils import hg_strip
+from .hgutils import hg_have_out
+from .hgutils import hg_config_set_default_remote
+from .logger import log
 
 
 def _clone_with_cache(orig, ui, repo, *args, **opts):  # pragma: no cover

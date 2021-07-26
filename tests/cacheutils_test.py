@@ -1,14 +1,14 @@
 import os
 import shutil
 import pytest
-from constants import ENVVAR_HG_CACHE
-from cacheutils import HgCacheConfigError
-from cacheutils import HgCacheOperationError
-from cacheutils import HgCacheInconsistentError
-from cacheutils import initialize_cache
-from hgutils import hg_config_set_default_remote
-from hgutils import hg_spoil_extra_changeset
-from hgutils import hg_spoil_local_changes
+from hg_cache.constants import ENVVAR_HG_CACHE
+from hg_cache.cacheutils import HgCacheConfigError
+from hg_cache.cacheutils import HgCacheOperationError
+from hg_cache.cacheutils import HgCacheInconsistentError
+from hg_cache.cacheutils import initialize_cache
+from hg_cache.hgutils import hg_config_set_default_remote
+from hg_cache.hgutils import hg_spoil_extra_changeset
+from hg_cache.hgutils import hg_spoil_local_changes
 
 
 def test_initialize_cache_no_envvar():

@@ -1,4 +1,4 @@
-from exeutils import SubcommandException
+from hg_cache.exeutils import SubcommandException
 
 
 def test_SubcommandException():

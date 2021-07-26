@@ -1,13 +1,13 @@
 #!/usr/bin/env python2
 
 import os
-from constants import ENVVAR_HG_CACHE
-from hgutils import hg_diff
-from hgutils import hg_pull
-from hgutils import hg_clone
-from hgutils import hg_have_out
-from hgutils import hg_config
-from logger import log
+from .constants import ENVVAR_HG_CACHE
+from .hgutils import hg_diff
+from .hgutils import hg_pull
+from .hgutils import hg_clone
+from .hgutils import hg_have_out
+from .hgutils import hg_config
+from .logger import log
 
 
 class HgCacheConfigError(RuntimeError):

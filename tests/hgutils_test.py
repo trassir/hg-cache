@@ -1,16 +1,16 @@
-from hgutils import hg_create_randomrepo
-from hgutils import hg_spoil_extra_changeset
-from hgutils import hg_spoil_missing_changeset
-from hgutils import hg_spoil_local_changes
-from hgutils import hg_config
-from hgutils import hg_config_set_default_remote
-from hgutils import hg_log
-from hgutils import hg_strip
-from hgutils import hg_diff
-from hgutils import hg_clone
-from hgutils import hg_pull
-from hgutils import hg_have_out
-from hgutils import hg_have_in
+from hg_cache.hgutils import hg_create_randomrepo
+from hg_cache.hgutils import hg_spoil_extra_changeset
+from hg_cache.hgutils import hg_spoil_missing_changeset
+from hg_cache.hgutils import hg_spoil_local_changes
+from hg_cache.hgutils import hg_config
+from hg_cache.hgutils import hg_config_set_default_remote
+from hg_cache.hgutils import hg_log
+from hg_cache.hgutils import hg_strip
+from hg_cache.hgutils import hg_diff
+from hg_cache.hgutils import hg_clone
+from hg_cache.hgutils import hg_pull
+from hg_cache.hgutils import hg_have_out
+from hg_cache.hgutils import hg_have_in
 
 
 def test_hg_create_randomrepo(tmpdir):

@@ -1,13 +1,13 @@
 #!/usr/bin/env python2
 
 import pytest
-from hgutils import hg_clone
-from hgutils import hg_pull
-from hgutils import hg_spoil_extra_changeset
-from hgutils import hg_spoil_local_changes
-from hgutils import hg_spoil_missing_changeset
-from exeutils import execute_hg_in_subdir
-from exeutils import SubcommandException
+from hg_cache.hgutils import hg_clone
+from hg_cache.hgutils import hg_pull
+from hg_cache.hgutils import hg_spoil_extra_changeset
+from hg_cache.hgutils import hg_spoil_local_changes
+from hg_cache.hgutils import hg_spoil_missing_changeset
+from hg_cache.exeutils import execute_hg_in_subdir
+from hg_cache.exeutils import SubcommandException
 
 
 def _assert_repo_understood_by_hg(repo):

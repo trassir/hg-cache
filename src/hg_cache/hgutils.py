@@ -3,10 +3,10 @@
 import os
 import subprocess
 import hashlib
-from constants import EXE_HG
-from exeutils import execute_in_subdir
-from exeutils import execute_hg_in_subdir
-from exeutils import execute_hg_in_subdir_or_die
+from .constants import EXE_HG
+from .exeutils import execute_in_subdir
+from .exeutils import execute_hg_in_subdir
+from .exeutils import execute_hg_in_subdir_or_die
 
 
 def hg_create_randomrepo(root, ncommits):
@@ -22,7 +22,7 @@ def hg_create_randomrepo(root, ncommits):
     cd = os.curdir
     os.chdir("%s" % root)
     subprocess.check_call([EXE_HG(), "init"])
-    for i in xrange(1, ncommits):
+    for i in range(1, ncommits):
         _hg_commit(128 * i)
     os.chdir(cd)
 

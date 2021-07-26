@@ -2,11 +2,11 @@
 
 import os
 import subprocess
-from logger import log
-from constants import ENVVAR_HG_CACHE
-from constants import HG_PLUGIN_ARGS
-from constants import IS_PYTEST
-from constants import EXE_HG
+from .logger import log
+from .constants import ENVVAR_HG_CACHE
+from .constants import HG_PLUGIN_ARGS
+from .constants import IS_PYTEST
+from .constants import EXE_HG
 
 
 class SubcommandException(RuntimeError):
@@ -33,7 +33,7 @@ def execute_in_subdir(subdir, args, cache="", ui=None):
         if cache is not None:
             os.environ[ENVVAR_HG_CACHE()] = "%s" % cache
         out = subprocess.check_output(args, stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError, e:
+    except subprocess.CalledProcessError as e:
         rc = e.returncode
         out = e.output
     os.chdir(cd)

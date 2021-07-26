@@ -26,7 +26,7 @@ def execute_in_subdir(subdir, args, cache="", ui=None):
     cd = os.path.abspath(os.curdir)
     os.chdir("%s" % subdir)
     rc = 0
-    out = ""
+    out: bytes = b""
     try:
         if cache is not None:
             os.environ[ENVVAR_HG_CACHE()] = "%s" % cache
@@ -34,6 +34,7 @@ def execute_in_subdir(subdir, args, cache="", ui=None):
     except subprocess.CalledProcessError as e:
         rc = e.returncode
         out = e.output
+
     os.chdir(cd)
     if IS_PYTEST():
         log("[ {rc} ] : {subdir} : {args}".format(

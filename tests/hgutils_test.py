@@ -66,11 +66,11 @@ def test_hg_diff(prepare_repos):
     (_, _, remote, _) = prepare_repos
     rc, out = hg_diff(remote)
     assert rc == 0
-    assert out == ""
+    assert out == b""
     hg_spoil_local_changes(remote)
     rc, out = hg_diff(remote)
     assert rc == 0
-    assert "localchange" in out
+    assert b"localchange" in out
 
 
 def test_hg_clone(prepare_repos):

@@ -9,8 +9,8 @@ from .exeutils import execute_hg_in_subdir_or_die
 
 def hg_create_randomrepo(root, ncommits):
     def _hg_commit(size):
-        text = open(__file__).read()
-        filedata = (text * (size / len(text) + 1))[:size]
+        text = open(__file__, 'rb').read()
+        filedata = (text * (size // len(text) + 1))[:size]
         md5 = hashlib.md5()
         md5.update(filedata)
         filename = os.path.join(md5.hexdigest())
@@ -44,8 +44,9 @@ def hg_spoil_local_changes(repo):
 
 def hg_config(directory, ui=None):
     _, out = execute_hg_in_subdir_or_die(directory, ["config"], ui=ui)
+    out = out.decode()
     return dict(
-        [[x[:x.index("=")], x[x.index("=")+1:]]
+        [x.split("=", maxsplit=1)
          for x in out.splitlines()])
 
 

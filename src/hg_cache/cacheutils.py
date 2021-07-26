@@ -75,7 +75,7 @@ def initialize_cache(ui, remote):
         raise HgCacheOperationError(
             "could not read hg diff from cache at cache at {cache}".format(
                 cache=cache_dir))  # pragma: no cover
-    if out != "":
+    if out:
         raise HgCacheInconsistentError(
             "cache at {cache} have local changes:\n{commits}".format(
                 cache=cache_dir, commits=out))

@@ -33,7 +33,7 @@ def test_hgcache_fresh_clone_by_abspath(prepare_repos):
     _assert_repo_understood_by_hg(remote)
     rc, out = execute_hg_in_subdir(
         foreign, ["clone", remote, local], cache=cache, use_self=True)
-    assert rc == 0
+    assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out)
     _assert_cache_consistent(local, cache)
 
 

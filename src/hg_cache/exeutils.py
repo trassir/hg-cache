@@ -44,9 +44,19 @@ def execute_in_subdir(subdir, args, cache="", ui=None):
 
 
 def execute_hg_in_subdir(subdir, args, cache="", ui=None, use_self=False):
-    return execute_in_subdir(
+    rc, out = execute_in_subdir(
         subdir, [EXE_HG()] + args + HG_PLUGIN_ARGS(use_self), cache=cache,
         ui=ui)
+    # if `uisetup(_)` fails in extension, then mercurial prints traceback,
+    # but executes the underlying command without any wrapping done
+    false_positives = [
+        b'failed to import extension',
+        b'failed to set up extension',
+        b'Unknown exception encountered',
+    ]
+    if rc == 0 and any(x in out for x in false_positives):
+        rc = -1
+    return rc, out
 
 
 def execute_hg_in_subdir_or_die(  #pylint: disable-msg=too-many-arguments

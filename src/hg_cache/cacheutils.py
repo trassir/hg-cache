@@ -20,7 +20,7 @@ class HgCacheInconsistentError(RuntimeError):
     """When cache sync operation fails to avoid data loss"""
 
 
-def initialize_cache(ui, remote):
+def initialize_cache(ui, remote: str):
     # cache dir must be specified
     if not ENVVAR_HG_CACHE() in os.environ:
         raise HgCacheConfigError(

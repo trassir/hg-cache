@@ -1,6 +1,8 @@
 import os
 import subprocess
 import hashlib
+from typing import Dict
+
 from .constants import EXE_HG
 from .exeutils import execute_in_subdir
 from .exeutils import execute_hg_in_subdir
@@ -42,7 +44,7 @@ def hg_spoil_local_changes(repo):
     execute_hg_in_subdir(repo, ["add", "localchange"])
 
 
-def hg_config(directory, ui=None):
+def hg_config(directory, ui=None) -> Dict[str, str]:
     _, out = execute_hg_in_subdir_or_die(directory, ["config"], ui=ui)
     out = out.decode()
     return dict(
@@ -50,7 +52,7 @@ def hg_config(directory, ui=None):
          for x in out.splitlines()])
 
 
-def hg_config_set_default_remote(directory, remote):
+def hg_config_set_default_remote(directory: str, remote: str):
     with open(os.path.join(directory, ".hg", "hgrc"), "a") as hgrc:
         hgrc.write("\n[paths]\n")
         hgrc.write("default={default}\n".format(default=remote))

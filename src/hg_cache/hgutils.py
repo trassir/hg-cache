@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import os
 import subprocess
 import hashlib
@@ -22,7 +20,7 @@ def hg_create_randomrepo(root, ncommits):
     cd = os.curdir
     os.chdir("%s" % root)
     subprocess.check_call([EXE_HG(), "init"])
-    for i in range(1, ncommits):
+    for i in range(1, ncommits+1):
         _hg_commit(128 * i)
     os.chdir(cd)
 

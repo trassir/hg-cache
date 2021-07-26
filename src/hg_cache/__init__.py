@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import os
 from mercurial import extensions, commands
 from .cacheutils import HgCacheOperationError

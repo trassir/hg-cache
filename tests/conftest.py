@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import pytest
 from hg_cache.hgutils import hg_create_randomrepo
 

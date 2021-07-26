@@ -1,5 +1,3 @@
-#!/usr/bin/env python2
-
 import os
 from .constants import ENVVAR_HG_CACHE
 from .hgutils import hg_diff

@@ -8,50 +8,41 @@ from hg_cache.exeutils import execute_hg_in_subdir
 from hg_cache.exeutils import SubcommandException
 
 
-def _assert_repo_understood_by_hg(repo):
-    rc, out = execute_hg_in_subdir(repo, ["log", "-G"])
-    assert rc == 0, "repo history cannot be browsed"
-
-
 def _assert_cache_consistent(local, cache):
-    _assert_repo_understood_by_hg(local)
-    _assert_repo_understood_by_hg(cache)
-    rc, out = execute_hg_in_subdir(
-        local, ["out", cache], cache=cache, use_self=True)
-    assert rc == 1, "local repo have more commits than cache"
-    rc, out = execute_hg_in_subdir(
-        local, ["in", cache], cache=cache, use_self=True)
-    assert rc == 1, "local repo have less commits than cache"
+    rc, out1 = execute_hg_in_subdir(local,
+        ["log", "-T", "{node}\n"])
+    assert rc == 0, "local repo history cannot be browsed"
+    rc, out2 = execute_hg_in_subdir(cache,
+        ["log", "-T", "{node}\n"])
+    assert rc == 0, "cache repo history cannot be browsed"
+    assert out1 == out2, "commits in cache and local do not match"
 
 
 def _clean(repo):
     pass
 
 
-def test_hgcache_fresh_clone_by_abspath(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
-    _assert_repo_understood_by_hg(remote)
+def test__fresh__clone_by_abspath(prepare_repos):
+    (local, cache, remote, _) = prepare_repos
     rc, out = execute_hg_in_subdir(
-        foreign, ["clone", remote, local], cache=cache, use_self=True)
-    assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out)
+        '.', ["clone", remote, local], cache=cache, use_self=True)
+    assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
     _assert_cache_consistent(local, cache)
 
 
-def test_hgcache_fresh_clone_by_curdir(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
-    _assert_repo_understood_by_hg(remote)
+def test__fresh__clone_by_curdir(prepare_repos):
+    (local, cache, remote, _) = prepare_repos
     rc, out = execute_hg_in_subdir(
         local, ["clone", remote, "."], cache=cache, use_self=True)
-    assert rc == 0
+    assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
     _assert_cache_consistent(local, cache)
 
 
-def test_hgcache_fresh_clone_by_omit(prepare_repos):
-    (local, cache, remote, foreign) = prepare_repos
-    _assert_repo_understood_by_hg(remote)
+def test__fresh__clone_by_omit(prepare_repos):
+    (local, cache, remote, _) = prepare_repos
     rc, out = execute_hg_in_subdir(
         local, ["clone", remote], cache=cache, use_self=True)
-    assert rc == 0
+    assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
     subdir_name = remote.split("/")[-1]
     _assert_cache_consistent(local + "/" + subdir_name, cache)
 
@@ -66,21 +57,18 @@ def test_hgcache_fresh_clone_by_omit(prepare_repos):
     _clean,
     hg_spoil_missing_changeset
 ])
-def test_hgcache_spoiled_pull_recover(
+def test__spoiled__pull_recover(
         prepare_repos, local_spoiler, cache_spoiler):
-    (local, cache, remote, foreign) = prepare_repos
+    (local, cache, remote, _) = prepare_repos
     # prepare typical situation of cache being used
-    _assert_repo_understood_by_hg(remote)
-    rc, out = hg_clone(cache, remote)
-    assert rc == 0
-    rc, out = hg_clone(local, remote)
-    assert rc == 0
+    rc, out = hg_clone(local, remote, cache=cache, use_self=True)
+    assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
     # add typical modifications that could happen to repos during usage
     local_spoiler(local)
     cache_spoiler(cache)
     # ensure that plugin can recover from that
     rc, out = hg_pull(local, remote, cache=cache, use_self=True)
-    assert rc == 0
+    assert rc == 0, "pull should have succeeded; instead got:\n{}".format(out.decode())
     _assert_cache_consistent(local, cache)
 
 
@@ -88,14 +76,11 @@ def test_hgcache_spoiled_pull_recover(
     hg_spoil_extra_changeset,
     hg_spoil_local_changes
 ])
-def test_hgcache_spoiled_cache_fail(prepare_repos, cache_spoiler):
-    (local, cache, remote, foreign) = prepare_repos
+def test__spoiled__cache_fail(prepare_repos, cache_spoiler):
+    (local, cache, remote, _) = prepare_repos
     # prepare typical situation of cache being used
-    _assert_repo_understood_by_hg(remote)
-    rc, out = hg_clone(cache, remote)
-    assert rc == 0
-    rc, out = hg_clone(local, remote)
-    assert rc == 0
+    rc, out = hg_clone(local, remote, cache=cache, use_self=True)
+    assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
     # spoil cache to be unusable
     cache_spoiler(cache)
     # ensure that plugin refuses to work with it to avoid data loss

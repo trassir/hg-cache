@@ -14,21 +14,21 @@ from hg_cache.hgutils import hg_have_in
 
 
 def test_hg_create_randomrepo(tmpdir):
-    hg_create_randomrepo(str(tmpdir), 13)
+    hg_create_randomrepo(str(tmpdir), 3)
 
 
 def test_hg_spoil_extra_changeset(tmpdir):
-    hg_create_randomrepo(str(tmpdir), 13)
+    hg_create_randomrepo(str(tmpdir), 3)
     hg_spoil_extra_changeset(str(tmpdir))
 
 
 def test_hg_spoil_missing_changeset(tmpdir):
-    hg_create_randomrepo(str(tmpdir), 13)
+    hg_create_randomrepo(str(tmpdir), 3)
     hg_spoil_missing_changeset(str(tmpdir))
 
 
 def test_hg_spoil_local_changes(tmpdir):
-    hg_create_randomrepo(str(tmpdir), 13)
+    hg_create_randomrepo(str(tmpdir), 3)
     hg_spoil_local_changes(str(tmpdir))
 
 

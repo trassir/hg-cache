@@ -4,7 +4,6 @@ import hashlib
 from typing import Dict
 
 from .constants import EXE_HG
-from .exeutils import execute_in_subdir
 from .exeutils import execute_hg_in_subdir
 from .exeutils import execute_hg_in_subdir_or_die
 
@@ -28,14 +27,14 @@ def hg_create_randomrepo(root, ncommits):
 
 
 def hg_spoil_extra_changeset(repo):
-    execute_in_subdir(repo, ["touch", "spoilfile"])
+    with open(os.path.join(repo, "spoilfile"), "wb"):
+        pass
     execute_hg_in_subdir(repo, ["add", "spoilfile"])
     execute_hg_in_subdir(repo, ["commit", "-m", "spoilfile", "-u", "testuser"])
 
 
 def hg_spoil_missing_changeset(repo):
-    _, out = execute_hg_in_subdir(repo, ["id", "-n"])
-    execute_hg_in_subdir(repo, ["strip", "-r", out, "--config", "extensions.strip="])
+    execute_hg_in_subdir(repo, ["strip", "-r", '.', "--config", "extensions.strip="])
 
 
 def hg_spoil_local_changes(repo):

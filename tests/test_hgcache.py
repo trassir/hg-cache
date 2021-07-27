@@ -23,7 +23,7 @@ def _clean(repo):
 
 
 def test__fresh__clone_by_abspath(prepare_repos):
-    (local, cache, remote, _) = prepare_repos
+    (local, cache, remote) = prepare_repos
     rc, out = execute_hg_in_subdir(
         '.', ["clone", remote, local], cache=cache, use_self=True)
     assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
@@ -31,7 +31,7 @@ def test__fresh__clone_by_abspath(prepare_repos):
 
 
 def test__fresh__clone_by_curdir(prepare_repos):
-    (local, cache, remote, _) = prepare_repos
+    (local, cache, remote) = prepare_repos
     rc, out = execute_hg_in_subdir(
         local, ["clone", remote, "."], cache=cache, use_self=True)
     assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
@@ -39,7 +39,7 @@ def test__fresh__clone_by_curdir(prepare_repos):
 
 
 def test__fresh__clone_by_omit(prepare_repos):
-    (local, cache, remote, _) = prepare_repos
+    (local, cache, remote) = prepare_repos
     rc, out = execute_hg_in_subdir(
         local, ["clone", remote], cache=cache, use_self=True)
     assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
@@ -59,7 +59,7 @@ def test__fresh__clone_by_omit(prepare_repos):
 ])
 def test__spoiled__pull_recover(
         prepare_repos, local_spoiler, cache_spoiler):
-    (local, cache, remote, _) = prepare_repos
+    (local, cache, remote) = prepare_repos
     # prepare typical situation of cache being used
     rc, out = hg_clone(local, remote, cache=cache, use_self=True)
     assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())
@@ -77,7 +77,7 @@ def test__spoiled__pull_recover(
     hg_spoil_local_changes
 ])
 def test__spoiled__cache_fail(prepare_repos, cache_spoiler):
-    (local, cache, remote, _) = prepare_repos
+    (local, cache, remote) = prepare_repos
     # prepare typical situation of cache being used
     rc, out = hg_clone(local, remote, cache=cache, use_self=True)
     assert rc == 0, "clone should have succeeded; instead got:\n{}".format(out.decode())

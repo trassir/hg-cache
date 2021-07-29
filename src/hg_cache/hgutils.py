@@ -46,10 +46,9 @@ def hg_spoil_local_changes(repo):
 
 def hg_config(directory, ui=None) -> Dict[str, str]:
     _, out = execute_hg_in_subdir_or_die(directory, ["config"], ui=ui)
-    out = out.decode()
-    return dict(
-        [x.split("=", maxsplit=1)
-         for x in out.splitlines()])
+    kvs = (x.split("=", maxsplit=1) for x in out.decode().splitlines())
+    return dict(kvs)
+
 
 
 def hg_config_set_default_remote(directory: str, remote: str):

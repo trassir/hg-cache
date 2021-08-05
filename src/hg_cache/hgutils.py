@@ -1,18 +1,17 @@
-#!/usr/bin/env python2
-
 import os
 import subprocess
 import hashlib
-from constants import EXE_HG
-from exeutils import execute_in_subdir
-from exeutils import execute_hg_in_subdir
-from exeutils import execute_hg_in_subdir_or_die
+from typing import Dict
+
+from .constants import EXE_HG
+from .exeutils import execute_hg_in_subdir
+from .exeutils import execute_hg_in_subdir_or_die
 
 
 def hg_create_randomrepo(root, ncommits):
     def _hg_commit(size):
-        text = open(__file__).read()
-        filedata = (text * (size / len(text) + 1))[:size]
+        text = open(__file__, 'rb').read()
+        filedata = (text * (size // len(text) + 1))[:size]
         md5 = hashlib.md5()
         md5.update(filedata)
         filename = os.path.join(md5.hexdigest())
@@ -22,20 +21,20 @@ def hg_create_randomrepo(root, ncommits):
     cd = os.curdir
     os.chdir("%s" % root)
     subprocess.check_call([EXE_HG(), "init"])
-    for i in xrange(1, ncommits):
+    for i in range(1, ncommits+1):
         _hg_commit(128 * i)
     os.chdir(cd)
 
 
 def hg_spoil_extra_changeset(repo):
-    execute_in_subdir(repo, ["touch", "spoilfile"])
+    with open(os.path.join(repo, "spoilfile"), "wb"):
+        pass
     execute_hg_in_subdir(repo, ["add", "spoilfile"])
     execute_hg_in_subdir(repo, ["commit", "-m", "spoilfile", "-u", "testuser"])
 
 
 def hg_spoil_missing_changeset(repo):
-    _, out = execute_hg_in_subdir(repo, ["id", "-n"])
-    execute_hg_in_subdir(repo, ["strip", "-r", out, "--config", "extensions.strip="])
+    execute_hg_in_subdir(repo, ["strip", "-r", '.', "--config", "extensions.strip="])
 
 
 def hg_spoil_local_changes(repo):
@@ -44,14 +43,14 @@ def hg_spoil_local_changes(repo):
     execute_hg_in_subdir(repo, ["add", "localchange"])
 
 
-def hg_config(directory, ui=None):
+def hg_config(directory, ui=None) -> Dict[str, str]:
     _, out = execute_hg_in_subdir_or_die(directory, ["config"], ui=ui)
-    return dict(
-        [[x[:x.index("=")], x[x.index("=")+1:]]
-         for x in out.splitlines()])
+    kvs = (x.split("=", maxsplit=1) for x in out.decode().splitlines())
+    return dict(kvs)
 
 
-def hg_config_set_default_remote(directory, remote):
+
+def hg_config_set_default_remote(directory: str, remote: str):
     with open(os.path.join(directory, ".hg", "hgrc"), "a") as hgrc:
         hgrc.write("\n[paths]\n")
         hgrc.write("default={default}\n".format(default=remote))

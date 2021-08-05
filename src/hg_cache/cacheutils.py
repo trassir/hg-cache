@@ -1,13 +1,11 @@
-#!/usr/bin/env python2
-
 import os
-from constants import ENVVAR_HG_CACHE
-from hgutils import hg_diff
-from hgutils import hg_pull
-from hgutils import hg_clone
-from hgutils import hg_have_out
-from hgutils import hg_config
-from logger import log
+from .constants import ENVVAR_HG_CACHE
+from .hgutils import hg_diff
+from .hgutils import hg_pull
+from .hgutils import hg_clone
+from .hgutils import hg_have_out
+from .hgutils import hg_config
+from .logger import log
 
 
 class HgCacheConfigError(RuntimeError):
@@ -22,7 +20,7 @@ class HgCacheInconsistentError(RuntimeError):
     """When cache sync operation fails to avoid data loss"""
 
 
-def initialize_cache(ui, remote):
+def initialize_cache(ui, remote: str):
     # cache dir must be specified
     if not ENVVAR_HG_CACHE() in os.environ:
         raise HgCacheConfigError(
@@ -35,17 +33,23 @@ def initialize_cache(ui, remote):
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
+    cache_dir_canonical_path = os.path.abspath(cache_dir).replace("\\", "/")
+
     # cache dir must be a directory
     if not os.path.isdir(cache_dir):
         raise HgCacheConfigError(
             "cache directory '{cache_dir}' is not a directory".format(
                 cache_dir=cache_dir))
 
-    # empty cache should be initialized with clean clone of remote
+    # if cache is empty, then we initialize it and simply return - no other checks
+    # are necessary (this speeds up the tests)
     if os.listdir(cache_dir) == []:
         log("cache at {cache_dir} is empty, populate using clone of {remote}"
             .format(cache_dir=cache_dir, remote=remote), ui=ui)
         hg_clone(cache_dir, remote, ui=ui)
+        return cache_dir_canonical_path
+
+    # if cache exists, then we perform multiple consistency checks and refresh it
 
     # cache has to be configured to use requested remote
     cache_cfg = hg_config(cache_dir, ui=ui)
@@ -77,7 +81,7 @@ def initialize_cache(ui, remote):
         raise HgCacheOperationError(
             "could not read hg diff from cache at cache at {cache}".format(
                 cache=cache_dir))  # pragma: no cover
-    if out != "":
+    if out:
         raise HgCacheInconsistentError(
             "cache at {cache} have local changes:\n{commits}".format(
                 cache=cache_dir, commits=out))
@@ -89,4 +93,4 @@ def initialize_cache(ui, remote):
             "cache at {cache} could not pull from {remote}:\n{out}".format(
                 cache=cache_dir, remote=remote, out=out))  # pragma: no cover
 
-    return os.path.abspath(cache_dir).replace("\\", "/")
+    return cache_dir_canonical_path

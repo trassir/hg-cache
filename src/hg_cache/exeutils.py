@@ -63,8 +63,7 @@ def execute_hg_in_subdir_or_die(  #pylint: disable-msg=too-many-arguments
         subdir, args, cache=None, ui=None, use_self=False, good_retcodes=None):
     if good_retcodes is None:
         good_retcodes = [0]
-    cmd = [EXE_HG()] + args + HG_PLUGIN_ARGS(use_self)
-    rc, out = execute_in_subdir(subdir, cmd, cache=cache, ui=ui)
+    rc, out = execute_hg_in_subdir(subdir, args, cache=cache, ui=ui, use_self=use_self)
     if rc not in good_retcodes:
-        raise SubcommandException(rc, os.path.abspath("%s" % subdir), cmd, out)
+        raise SubcommandException(rc, os.path.abspath("%s" % subdir), args, out)
     return rc, out

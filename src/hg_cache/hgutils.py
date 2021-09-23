@@ -74,7 +74,7 @@ def hg_diff(local, ui=None, cache=None, use_self=False):
 
 def hg_clone(local, remote, ui=None, cache=None, use_self=False):
     return execute_hg_in_subdir_or_die(
-        local, ["clone", remote, "."], ui=ui, cache=cache, use_self=use_self)
+        local, ["clone", "-U", remote, "."], ui=ui, cache=cache, use_self=use_self)
 
 
 def hg_pull(local, remote, ui=None, cache=None, use_self=False):
